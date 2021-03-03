@@ -1,0 +1,24 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "endOfLine": "auto",
+  "arrowParens": "always",
+  "trailingComma": "all",
+  "semi": true,
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
+}
