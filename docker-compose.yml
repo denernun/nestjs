@@ -1,0 +1,38 @@
+version: '3.8'
+networks:
+  network:
+    name: network
+    driver: bridge
+volumes:
+  data:
+    external:
+      name: nestjs
+services:
+  app:
+    build: .
+    hostname: nestjs
+    container_name: nestjs
+    entrypoint: ./docker-entrypoint.sh
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+    networks:
+      - network
+    volumes:
+      - data:/home/node/app
+  db:
+    image: mysql/mysql-server:5.7
+    container_name: nestjs-db
+    restart: always
+    tty: true
+    ports:
+      - "33306:3306"
+    networks:
+      - network
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nestjs
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=root
