@@ -1,38 +1,67 @@
 version: '3.8'
+
 networks:
-  network:
-    name: network
+  api:
+    name: api
     driver: bridge
+
 volumes:
-  data:
-    external:
-      name: nestjs
+  postgres:
+    external: true
+    name: postgres
+  redis:
+    external: true
+    name: redis
+  api:
+    name: api
+
 services:
+
+  postgres:
+    image: postgres:12.12
+    hostname: postgres
+    container_name: api-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '54322:5432'
+    networks:
+      - api
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    hostname: redis
+    container_name: api-redis
+    restart: always
+    command: redis-server
+    ports:
+      - '63799:6379'
+    networks:
+      - api
+    volumes:
+      - redis:/data
+
   app:
-    build: .
-    hostname: nestjs
-    container_name: nestjs
-    entrypoint: ./docker-entrypoint.sh
+    build:
+      context: .
+      target: development
+    hostname: api
+    container_name: api
+    # entrypoint: ["npm", "run", "start"]
+    command: npm run start:dev
     environment:
       - NODE_ENV=development
     ports:
       - 3000:3000
     networks:
-      - network
+      - api
     volumes:
-      - data:/home/node/app
-  db:
-    image: mysql/mysql-server:5.7
-    container_name: nestjs-db
-    restart: always
-    tty: true
-    ports:
-      - "33306:3306"
-    networks:
-      - network
-    volumes:
-      - data:/var/lib/mysql
-    environment:
-      - MYSQL_DATABASE=nestjs
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=root
+      - api:/usr/src/app
+    depends_on:
+      - postgres
+      - redis

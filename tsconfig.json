@@ -6,10 +6,25 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "es6",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "noEmit": false,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
+    "composite": true,
+    "declarationMap": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noLib": false,
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
 }
